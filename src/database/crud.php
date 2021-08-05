@@ -10,11 +10,12 @@ if (isset($_POST["request"])) {
         case 'update':
             require_once 'Update.php';
             $loadClass = new Update();
-            if(isset($_POST['finalizado'])){
-                echo $loadClass->finalizar();
-            }else{
-                echo $loadClass->update();
-            }
+            echo $loadClass->update();
+            break;
+        case 'finalizar':
+            require_once 'Update.php';
+            $loadClass = new Update();
+            echo $loadClass->finalizar();
             break;
         case 'delete':
             require_once 'Delete.php';

@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once '../../database/Read.php';
 require_once '../../database/crud.php';
 ?>
@@ -37,48 +37,33 @@ require_once '../../database/crud.php';
 
             <?php while ($row = $tarefas->fetch_assoc()) { ?>
                 <div class="tarefa">
-                    <span id="<?php echo $row['id']; ?>" class="remover-tarefa">x</span>
-                    <?php if ($row['finalizado']) { ?>
-
-                        <input type="checkbox" class="check-box" data-todo-id="<?php echo $row['id']; ?>" checked />
+                    <form method="POST" action="../../database/crud.php">
+                        <input name="id" type="hidden" value="<?php echo $row['id']; ?>">
+                        <input name="request" type="hidden" value="delete">
+                        <button type="submit" class="remover-tarefa" onclick="return confirm('Deseja mesmo excluir a tarefa?');">x</button>
+                    </form>
+                    <?php if ($row['finalizado'] == "1") { ?>
+                        <form method="POST" action="../../database/crud.php">
+                            <input name="id" type="hidden" value="<?php echo $row['id']; ?>">
+                            <input name="request" type="hidden" value="finalizar">
+                            <button type="submit" class="checkButton">✓</button>
+                        </form>
                         <h2 class="finalizado"><?php echo $row['descricao'] ?></h2>
                         <small>Finalizado em: <?php echo $row['dt_finalizado'] ?></small>
 
                     <?php } else { ?>
 
-                        <input type="checkbox" data-todo-id="<?php echo $row['id']; ?>" class="check-box" />
-                        <button 
-                            type="button" 
-                            class="edit" 
-                            data-toggle="modal" 
-                            data-target="#modal" 
-                            data-descricao="<?php echo $row['descricao'] ?>" 
-                            data-id="<?php echo $row['id']; ?>" 
-                            data-act="Atualizar Tarefa"><?php echo $row['descricao'] ?></button>
+                        <form method="POST" action="../../database/crud.php">
+                            <input name="id" type="hidden" value="<?php echo $row['id']; ?>">
+                            <input name="request" type="hidden" value="finalizar">
+                            <button type="submit" class="checkButton"></button>
+                        </form>
+                        <button type="button" class="edit" data-toggle="modal" data-target="#modal" data-descricao="<?php echo $row['descricao'] ?>" data-id="<?php echo $row['id']; ?>" data-act="Atualizar Tarefa"><?php echo $row['descricao'] ?></button>
                         <small>Criado em: <?php echo $row['dt_criacao'] ?> <br> Última alteração: <?php echo $row['dt_ult_alt'] ?> </small>
 
                     <?php } ?>
                 </div>
             <?php } ?>
-            <div class="tarefa">
-                <span id="1" class="remover-tarefa">x</span>
-                <input type="checkbox" data-id="1" class="check-box" />
-                <button type="button" class="edit" data-toggle="modal" data-target="#modal" data-descricao="teste1" data-id="1" data-act="Atualizar Tarefa">teste</button>
-                <small>Criado em: agorinha <br> Última alteração: agorinha</small>
-            </div>
-            <div class="tarefa">
-                <span id="2" class="remover-tarefa">x</span>
-                <input type="checkbox" data-id="2" class="check-box" />
-                <button type="button" class="edit" data-toggle="modal" data-target="#modal" data-descricao="teste2" data-id="2" data-act="Atualizar Tarefa">teste2</button>
-                <small>Criado em: agorinha <br> Última alteração: agorinha</small>
-            </div>
-            <div class="tarefa">
-                <span id="2" class="remover-tarefa">x</span>
-                <input type="checkbox" class="check-box" data-todo-id="2" checked />
-                <h2 class="finalizado">finalizado</h2>
-                <small>Finalizado em: agorinha</small>
-            </div>
-
         </div>
 
 
@@ -101,7 +86,7 @@ require_once '../../database/crud.php';
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                                <button type="submit" class="btn btn-primary">Atualizar</button>
+                                <button type="submit" class="btn btn-primary" id="tipoBotao">Atualizar</button>
                             </div>
                         </form>
                     </div>
@@ -122,6 +107,7 @@ require_once '../../database/crud.php';
             modal.find('#id_tarefa').val(idTarefa)
             modal.find('#descricao').val(tipo == "Atualizar Tarefa" ? descricaoTarefa : '')
             modal.find('#request').val(tipo == "Atualizar Tarefa" ? 'update' : 'create')
+            modal.find('#tipoBotao').text(tipo == "Atualizar Tarefa" ? 'Atualizar' : 'Criar')
         })
     </script>
 </body>

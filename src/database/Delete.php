@@ -11,7 +11,8 @@ class Delete extends Database
                 WHERE id = {$id};";
         $result = mysqli_query($this->db, $sql);
         if ($result) {
-            return 'true';
+            header("Location: ../screens/Home/");
+            exit;
         }
     }
 }

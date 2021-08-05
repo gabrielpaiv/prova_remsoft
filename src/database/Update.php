@@ -14,9 +14,8 @@ class Update extends Database
                 WHERE id = {$id}; ";
         $result = mysqli_query($this->db, $sql);
         if ($result) {
-            return 'true';
-        } else {
-            return 'false';
+            header("Location: ../screens/Home/");
+            exit;
         }
     }
     public function finalizar()
@@ -26,24 +25,28 @@ class Update extends Database
         $sql = "SELECT finalizado
                 FROM tarefa
                 WHERE id = {$id}";
-                
-        $isFinished = mysqli_query($this->db, $sql);
-        
-        if ($isFinished) {
-            $sql = "UPDATE finalizado
-                    SET 0
+
+        $result = mysqli_query($this->db, $sql);
+        $isFinished = mysqli_fetch_assoc($result);
+        if ($isFinished["finalizado"] == "1") {
+            // var_dump("finalizado");
+            $sql = "UPDATE tarefa
+                    SET finalizado = 0, dt_finalizado = NULL
                     WHERE id = {$id}";
             $result = mysqli_query($this->db, $sql);
-            if($result){
-                return true;
+            if ($result) {
+                header("Location: ../screens/Home/");
+                exit;
             }
-        } else {
-            $sql = "UPDATE finalizado
-                    SET 1
+        } else if ($isFinished["finalizado"] == "0") {
+            // var_dump("finalizar");
+            $sql = "UPDATE tarefa
+                    SET finalizado = 1, dt_finalizado = NOW()
                     WHERE id = {$id}";
             $result = mysqli_query($this->db, $sql);
-            if($result){
-                return true;                
+            if ($result) {
+                header("Location: ../screens/Home/");
+                exit;
             }
         }
     }
